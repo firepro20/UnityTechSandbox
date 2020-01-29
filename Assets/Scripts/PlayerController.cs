@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
         bool deviceConnected = false;
         //Get Joystick Names
         string[] temp = Input.GetJoystickNames();
-
+        
         //Check whether array contains anything
         if (temp.Length > 0)
         {
