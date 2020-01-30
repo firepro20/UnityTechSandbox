@@ -63,8 +63,8 @@ public class PlayerController : MonoBehaviour
     private void PlayerMovement()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask); // true if object hit is within groundmask layer
-
-        if (!isGrounded && transform.position.y < -1f)
+        Debug.Log("Transform y is - " + transform.position.y);
+        if (transform.position.y < -5f)
         {
             transform.position = lastPosition;
             Debug.Log("Triggered!");
