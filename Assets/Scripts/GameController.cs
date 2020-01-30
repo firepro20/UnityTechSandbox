@@ -7,6 +7,15 @@ public class GameController : MonoBehaviour
     private static GameController instance;
     public static GameController Instance { get { return instance; } }
 
+    // Class References //
+
+
+    // Public Variables //
+
+    // Private Variables //
+    // Game Logic
+    private int gameTime;
+
     void Awake()
     {
         /* Singleton */
@@ -24,14 +33,18 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // Initialize all variables
+        gameTime = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Convert Time from float to int
+        gameTime = (int)Time.time;
+        
         // Check Input every 4 seconds since start of the game
-        if (Time.time % 4 == 0)
+        if (gameTime % 5 == 0)
         {
             CheckInputDevices();
         }
@@ -43,7 +56,7 @@ public class GameController : MonoBehaviour
         bool deviceConnected = false;
         //Get Joystick Names
         string[] temp = Input.GetJoystickNames();
-        Debug.Log("Called!");
+        Debug.LogWarning("Called! At " + gameTime);
         //Check whether array contains anything
         if (temp.Length > 0)
         {
