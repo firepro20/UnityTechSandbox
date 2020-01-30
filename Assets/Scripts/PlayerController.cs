@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
         if (!isGrounded && transform.position.y < -1f)
         {
             transform.position = lastPosition;
-            velocity.y = 0f;
             Debug.Log("Triggered!");
         }
 
