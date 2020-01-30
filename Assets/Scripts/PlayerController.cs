@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
     private float zAxis;
     private Vector3 velocity;
 
+    // Checkpoint 
+    private Vector3 lastPosition; // last position of player
+
     // Movement Flags
     private bool toggleDash;
     private bool isGrounded; 
@@ -46,7 +49,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // Initialize all variables
+        lastPosition = new Vector3(0f, 0f, 0f);
     }
 
     // Update is called once per frame
@@ -60,8 +64,17 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask); // true if object hit is within groundmask layer
 
+        if (!isGrounded && transform.position.y < -1f)
+        {
+            transform.position = lastPosition;
+            velocity.y = 0f;
+            Debug.Log("Triggered!");
+        }
+
         if (isGrounded && velocity.y < 0)
         {
+            lastPosition = transform.position;
+            Debug.Log("lastPosition - " + lastPosition);
             velocity.y = -2f; // ensures player is fully grounded since we are using a sphere
         }
 

@@ -56,7 +56,7 @@ public class GameController : MonoBehaviour
         bool deviceConnected = false;
         //Get Joystick Names
         string[] temp = Input.GetJoystickNames();
-        Debug.LogWarning("Called! At " + gameTime);
+        
         //Check whether array contains anything
         if (temp.Length > 0)
         {
