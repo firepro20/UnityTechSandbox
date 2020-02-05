@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class GameController : MonoBehaviour
 
 
     // Public Variables //
+    // Current Speed UI
+    public TMPro.TextMeshProUGUI currentPlayerSpeed;
 
     // Private Variables //
     // Game Logic
@@ -43,11 +47,14 @@ public class GameController : MonoBehaviour
         // Convert Time from float to int
         gameTime = (int)Time.time;
         
-        // Check Input every 4 seconds since start of the game
+        // Check Input every 5 seconds since start of the game
         if (gameTime % 5 == 0)
         {
             CheckInputDevices();
         }
+
+        // Updates Speed Text on UI
+        currentPlayerSpeed.text = String.Format("Speed - {0:F0}", PlayerController.Instance.GetPlayerSpeed()); 
     }
 
     // Checks for connected controllers

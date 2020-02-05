@@ -78,9 +78,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 8050952155379557239}
-  playerSpeed: 10
+  playerSpeed: 0
+  acceleration: 10
+  maxPlayerSpeed: 20
   gravity: -19.62
   jumpHeight: 3
+  dashDistance: 15
+  dashCooldown: 4
   groundCheck: {fileID: 8050952154883638409}
   groundDistance: 0.4
   groundMask:
@@ -279,5 +283,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203b6361afe1d5849aa2ee8331231949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 100
+  mouseSensitivity: 200
   playerBody: {fileID: 8050952155379557256}
