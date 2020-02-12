@@ -101,7 +101,8 @@ public class PlayerController : MonoBehaviour
                
         if (zAxis == 0)
         {
-            currentPlayerSpeed -= acceleration * Time.deltaTime;
+            currentPlayerSpeed -= acceleration * 2.0f * Time.deltaTime;
+            // speed reduced by twice the amount of acceleration
         }
         
         //Clamp the speed
