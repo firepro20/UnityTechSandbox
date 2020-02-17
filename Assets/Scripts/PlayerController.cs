@@ -13,15 +13,20 @@ public class PlayerController : MonoBehaviour
     // Public Variables //
     // Player Movement
     public float playerSpeed = 5f;
+    public float playerHealth = 10f;
     public float acceleration = 5f;
     public float maxPlayerSpeed = 20f;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
     public float dashDistance = 15f;
     public float dashCooldown = 4f;
+    public float throwCooldown = 6f;
     public Transform groundCheck; // empty GroundCheck object
     public float groundDistance = 0.4f; // radius of physics check sphere
     public LayerMask groundMask; // only check for ground
+
+    // Sword Control
+    public GameObject playerSword;
 
     // Private Variables //
     // Input Movement
@@ -30,6 +35,13 @@ public class PlayerController : MonoBehaviour
     private float currentPlayerSpeed;
     private Vector3 velocity;
     private float dashTimer;
+    private float throwTimer;
+
+    // Player Health
+    private float pHealth;
+
+    // Sword Control
+    private bool isSwinging;
 
     // Checkpoint 
     private Vector3 lastPosition; // last position of player
@@ -59,12 +71,19 @@ public class PlayerController : MonoBehaviour
         currentPlayerSpeed = playerSpeed;
         lastPosition = new Vector3(0f, 0f, 0f);
         dashTimer = dashCooldown;
+        isSwinging = false;
+        if (!playerSword)
+        {
+            Debug.Log("Player Sword is not set in inspector!");
+        }
+        pHealth = playerHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
         PlayerMovement();
+        SwordControl();
     }
 
     private void LateUpdate()
@@ -98,29 +117,35 @@ public class PlayerController : MonoBehaviour
             //Increase the player speed
             currentPlayerSpeed += acceleration * Time.deltaTime;
         }
-               
+        
         if (zAxis == 0)
         {
-            currentPlayerSpeed -= acceleration * 2.0f * Time.deltaTime;
             // speed reduced by twice the amount of acceleration
+            currentPlayerSpeed -= acceleration * 2.0f * Time.deltaTime;
+            
+            /* Slide Snippet */
+            //characterController.Move(transform.TransformDirection(Vector3.forward) * Time.deltaTime);
+            // multiply by slide duration on timer so that it stop after some time  
+            // Newton's Second Law of Motion // Possible Inclusion https://www.youtube.com/watch?v=ckm7HhwNDvk
         }
-        
+
         //Clamp the speed
         currentPlayerSpeed = Mathf.Clamp(currentPlayerSpeed, 0f, maxPlayerSpeed);
         
         Vector3 movement = transform.right * xAxis + transform.forward * zAxis;
         characterController.Move(movement * currentPlayerSpeed * Time.deltaTime);
-        
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); // how much velocity we need to jump
         }
 
-        // Dash Ability
+        /* Dash Ability */
         dashTimer -= Time.deltaTime;
         dashTimer = Mathf.Clamp(dashTimer, 0f, dashCooldown);
-        
-        if (Input.GetKeyDown(KeyCode.LeftShift)) // GetKeyDown checks for first time key was pressed, GetKey constantly checks and returns interrupt more than once
+
+        // GetKeyDown checks for first time key was pressed, GetKey constantly checks and returns interrupt more than once
+        if (Input.GetKeyDown(KeyCode.LeftShift)) 
         {
             if (dashTimer <= 0f)
             {
@@ -131,9 +156,54 @@ public class PlayerController : MonoBehaviour
 
         // Freefall formula, applies gravity over time
         velocity.y += gravity * Time.deltaTime;
-        Debug.Log(velocity.y);
+        
         characterController.Move(velocity * Time.deltaTime); 
         // End of Freefall
+    }
+
+    private void SwordControl()
+    {
+        // Left mouse button
+        if (Input.GetKeyDown(KeyCode.Mouse0) && playerSword != null)
+        {
+            if (!isSwinging)
+            {
+                Debug.Log("Clicked Left!");
+                isSwinging = true;
+                StartCoroutine(SwordAttack());
+            }
+            else
+            {
+                Debug.Log("Currently Swinging, please wait!");
+            }
+        }
+
+        /* Throw Ability */
+        throwTimer -= Time.deltaTime;
+        throwTimer = Mathf.Clamp(throwTimer, 0f, throwCooldown);
+        // Right mouse button
+        if (Input.GetKeyDown(KeyCode.Mouse2) && throwTimer <= 0f)
+        {
+            if (playerSword != null)
+            {
+                Debug.Log("Throw Weapon!");
+                SwordController.Instance.ThrowSword();
+                throwTimer = throwCooldown;
+            }
+        }
+    }
+    
+    private IEnumerator SwordAttack()
+    {
+        // SwordController.Instance.SwingSword();
+        yield return new WaitForSeconds(2f);
+        isSwinging = false;
+        Debug.Log("Swing complete!");
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        pHealth -= damageAmount;
     }
 
     // Returns current player speed
@@ -142,5 +212,9 @@ public class PlayerController : MonoBehaviour
         return currentPlayerSpeed;
     }
     
+    public float GetPlayerHealth()
+    {
+        return pHealth;
+    }
     
 }
