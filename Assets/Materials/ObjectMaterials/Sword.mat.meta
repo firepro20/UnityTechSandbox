@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Materials/ObjectMaterials/Sword.mat.meta
 guid: 4f30a779528830a48bfbcc96b9180395
+=======
+guid: 969451746092d6e44b25588e002b7ece
+>>>>>>> 08125d7a7dc96604ce5668a00344e97df0adccbc:Assets/Scenes/DanielScene/PostProcessing Profile.asset.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0

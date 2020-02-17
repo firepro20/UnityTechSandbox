@@ -105,8 +105,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b95550116d507e349b642ec5e60404f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   characterController: {fileID: 8050952155379557239}
   playerSpeed: 0
   playerHealth: 10
@@ -273,8 +273,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 203b6361afe1d5849aa2ee8331231949, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   mouseSensitivity: 200
   playerBody: {fileID: 8050952155379557256}
 --- !u!20 &9032879948133264519
@@ -330,8 +330,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
@@ -366,7 +366,7 @@ PrefabInstance:
     - target: {fileID: 7785660022628542794, guid: 2ebec4f93de375d4c82f755af29f3a22,
         type: 3}
       propertyPath: shootPoint
-      value: 
+      value:
       objectReference: {fileID: 4255406949597980304}
     - target: {fileID: 7785660022628542794, guid: 2ebec4f93de375d4c82f755af29f3a22,
         type: 3}

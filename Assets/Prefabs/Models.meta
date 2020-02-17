@@ -1,8 +1,14 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Prefabs/Models.meta
 guid: 21a7c9a933236b8459eb28b504df0e63
 folderAsset: yes
 DefaultImporter:
+=======
+guid: ed4a554a8621dfa43acb93ad2c4d4224
+NativeFormatImporter:
+>>>>>>> 08125d7a7dc96604ce5668a00344e97df0adccbc:Assets/UniversalRenderPipelineAsset.asset.meta
   externalObjects: {}
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
