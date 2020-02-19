@@ -115,7 +115,8 @@ public class SwordController : MonoBehaviour
             //Vector3 localForward = transform.parent.InverseTransformDirection(transform.forward);
             sword.GetComponent<Rigidbody>().useGravity = true;
             sword.GetComponent<Rigidbody>().detectCollisions = true;
-            float forceMultiplier = 0f;
+            float forceMultiplier = 2f; // 0f
+            /*
             if (PlayerController.Instance.GetPlayerSpeed() == forceMultiplier)
             {
                 forceMultiplier = 0f;
@@ -128,6 +129,7 @@ public class SwordController : MonoBehaviour
             {
                 forceMultiplier = 2f;
             }
+            */
             sword.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * throwForce * forceMultiplier); // swordParent.transform.forward // fires from pivot3
             //Debug.LogError("Launched!");
         }
