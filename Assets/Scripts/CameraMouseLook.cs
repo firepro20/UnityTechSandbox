@@ -22,6 +22,7 @@ public class CameraMouseLook : MonoBehaviour
     {
         // removes and locks mouse to the centre of screen
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
