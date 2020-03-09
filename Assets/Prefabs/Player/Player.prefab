@@ -116,6 +116,7 @@ MonoBehaviour:
   jumpHeight: 3
   dashDistance: 15
   dashCooldown: 4
+  throwCooldown: 6
   groundCheck: {fileID: 8050952154883638409}
   groundDistance: 0.4
   groundMask:
@@ -301,7 +302,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 500
+  far clip plane: 200
   field of view: 60
   orthographic: 0
   orthographic size: 5
