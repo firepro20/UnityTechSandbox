@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4861924686910468554, guid: 0a69b44648235d84b911bd25de7dfde0,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 985924a8a4b332f4abe55f916c8825bf, type: 2}
     - target: {fileID: -4216859302048453862, guid: 0a69b44648235d84b911bd25de7dfde0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -65,7 +70,12 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 0a69b44648235d84b911bd25de7dfde0,
         type: 3}
       propertyPath: m_Name
-      value: RampGreybox
+      value: RampGreyboxModel
       objectReference: {fileID: 0}
+    - target: {fileID: 856365191234717131, guid: 0a69b44648235d84b911bd25de7dfde0,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 985924a8a4b332f4abe55f916c8825bf, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a69b44648235d84b911bd25de7dfde0, type: 3}

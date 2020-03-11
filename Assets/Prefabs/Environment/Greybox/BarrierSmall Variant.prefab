@@ -65,7 +65,12 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 53243389b5794854d812a7f63fec113a,
         type: 3}
       propertyPath: m_Name
-      value: BarrierSmallModel
+      value: BarrierSmall Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 7087200961041043365, guid: 53243389b5794854d812a7f63fec113a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 985924a8a4b332f4abe55f916c8825bf, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53243389b5794854d812a7f63fec113a, type: 3}

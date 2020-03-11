@@ -77,10 +77,15 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 450b1436ce33e4c44a2de9be1f630cfa,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 985924a8a4b332f4abe55f916c8825bf, type: 2}
     - target: {fileID: -927199367670048503, guid: 450b1436ce33e4c44a2de9be1f630cfa,
         type: 3}
       propertyPath: m_Name
-      value: ArmouredTransportGreybox
+      value: ArmouredTransportGreyboxModel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 450b1436ce33e4c44a2de9be1f630cfa, type: 3}

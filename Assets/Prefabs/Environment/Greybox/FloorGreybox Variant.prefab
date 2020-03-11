@@ -62,10 +62,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 98dd0f8c069bf2147b3d3c28d211a97c,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 985924a8a4b332f4abe55f916c8825bf, type: 2}
     - target: {fileID: -927199367670048503, guid: 98dd0f8c069bf2147b3d3c28d211a97c,
         type: 3}
       propertyPath: m_Name
-      value: FloorGreybox
+      value: FloorGreybox Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98dd0f8c069bf2147b3d3c28d211a97c, type: 3}

@@ -192,6 +192,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: RampGreyboxModel
       objectReference: {fileID: 0}
+    - target: {fileID: 6729772336681003687, guid: 7c5bfc4517fa003499b389e3163384d1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 985924a8a4b332f4abe55f916c8825bf, type: 2}
+    - target: {fileID: 7638217753214509402, guid: 7c5bfc4517fa003499b389e3163384d1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 985924a8a4b332f4abe55f916c8825bf, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c5bfc4517fa003499b389e3163384d1, type: 3}
 --- !u!4 &2610014078119097154 stripped
