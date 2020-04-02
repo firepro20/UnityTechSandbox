@@ -54,7 +54,9 @@ public class GameController : MonoBehaviour
         }
 
         // Updates Speed Text on UI
-        currentPlayerSpeed.text = String.Format("Speed {0:F0}", PlayerController.Instance.GetPlayerSpeed()); 
+        currentPlayerSpeed.text = String.Format("Speed {0:F0}", PlayerController.Instance.GetPlayerSpeed());
+
+        Quit();
     }
 
     // Checks for connected controllers
@@ -87,6 +89,14 @@ public class GameController : MonoBehaviour
             }
         }
         return deviceConnected;
+    }
+
+    private void Quit()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
 }

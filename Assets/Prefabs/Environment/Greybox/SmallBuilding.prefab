@@ -43,6 +43,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmallBuildingGreyboxModel
       objectReference: {fileID: 0}
+    - target: {fileID: 3019890940258488325, guid: 37672d4dc9f8a5f42accbf5d7e0d774f,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4047038813562731129, guid: 37672d4dc9f8a5f42accbf5d7e0d774f,
         type: 3}
       propertyPath: m_LocalPosition.x

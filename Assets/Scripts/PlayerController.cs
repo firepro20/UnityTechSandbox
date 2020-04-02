@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,6 +29,17 @@ public class PlayerController : MonoBehaviour
     // Sword Control
     public GameObject playerSword;
 
+    // Animator
+    public Animator playerAnimator;
+    //public AnimatorController playerAnimatorController;
+    // Clip Duration
+    private float dashClip, deathClip, firstSlashClip, poseClip, secondSlashClip,
+                  shieldClip, spinClip, swordPickupClip, swordThrowClip, swordlessIdleClip, swordlessWalkClip;
+    // Clip List
+    private AnimationClip[] clips;
+    // Layer List
+    //private AnimatorControllerLayer[] layers;
+
     // Private Variables //
     // Input Movement
     private float xAxis;
@@ -38,7 +50,7 @@ public class PlayerController : MonoBehaviour
     private float throwTimer;
 
     // Player Health
-    private float pHealth;
+    private float currentPlayerHealth;
 
     // Sword Control
     private bool isSwinging;
@@ -76,12 +88,15 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Player Sword is not set in inspector!");
         }
-        pHealth = playerHealth;
+        currentPlayerHealth = playerHealth;
+        UpdateAnimationClipTimes();
+        //UpdateLayerWeight();
     }
 
     // Update is called once per frame
     void Update()
     {
+        PlayerStatus();
         PlayerMovement();
         SwordControl();
     }
@@ -92,6 +107,102 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -40f)
         {
             transform.position = lastPosition;
+        }
+    }
+
+    // Gets animation clip speed and assigns them to floats
+    private void UpdateAnimationClipTimes()
+    {
+        clips = playerAnimator.runtimeAnimatorController.animationClips;
+        foreach (AnimationClip clip in clips)
+        { 
+            switch (clip.name)
+            {
+                case "UI_Main_Dash":
+                    dashClip = clip.length;
+                    break;
+                case "UI_Main_Death":
+                    deathClip = clip.length;
+                    break;
+                case "UI_Main_First_Slash":
+                    firstSlashClip = clip.length;
+                    break;
+                case "UI_Main_Pose_Walk":
+                    poseClip = clip.length;
+                    break;
+                case "UI_Main_Second_Slash":
+                    secondSlashClip = clip.length;
+                    break;
+                case "UI_Main_Shield_Break":
+                    shieldClip = clip.length;
+                    break;
+                case "UI_Main_Spin":
+                    spinClip = clip.length;
+                    break;
+                case "UI_Main_Sword_Pick_Up":
+                    swordPickupClip = clip.length;
+                    break;
+                case "UI_Main_Sword_Throw":
+                    swordThrowClip = clip.length;
+                    break;
+                case "UI_Main_Swordless_Idle":
+                    swordlessIdleClip = clip.length;
+                    break;
+                case "UI_Main_Swordless_Walk":
+                    swordlessWalkClip = clip.length;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /*
+    private void UpdateLayerWeight()
+    {
+        layers = playerAnimatorController.layers;
+        // remove first element which represents first layer, 
+        //as default weight does not take into account first layer
+        foreach (AnimatorControllerLayer animatorLayer in layers)
+        {
+            // case hold info on different weights
+            Debug.Log(animatorLayer.name);
+            Debug.Log(animatorLayer.defaultWeight);
+        }
+    }
+    */
+
+    // Checks player health
+    private void PlayerStatus()
+    {
+        if (currentPlayerHealth <= 0 || Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("KeyPressed");
+            if (!playerAnimator.GetBool("isDead"))
+            {
+                playerAnimator.SetBool("isDead", true);
+                StartCoroutine(ClipDelay(deathClip));
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            playerAnimator.SetBool("isDead", false);
+            SceneManager.LoadScene("MainScene");
+        }
+        if (Input.GetKeyDown(KeyCode.H)) // playerHit
+        {
+            playerAnimator.SetBool("isHit", true);
+            StartCoroutine(ClipDelay(shieldClip, "isHit"));
+        }
+    }
+
+    private IEnumerator ClipDelay(float clipDuration, string animationName = null, bool animState = false)
+    {
+        yield return new WaitForSeconds(clipDuration);
+        StopCoroutine(ClipDelay(clipDuration, animationName));
+        if (animationName != null)
+        {
+            playerAnimator.SetBool(animationName, animState);
         }
     }
 
@@ -131,7 +242,13 @@ public class PlayerController : MonoBehaviour
 
         //Clamp the speed
         currentPlayerSpeed = Mathf.Clamp(currentPlayerSpeed, 0f, maxPlayerSpeed);
-        
+
+        // Accelerate UI spinner and increase movement animation
+        float layerWeight = currentPlayerSpeed / maxPlayerSpeed;
+        //layerWeight = Mathf.Clamp(layerWeight, playerAnimator.GetLayerWeight(2), 1); // Issue here I need to get and store layer weight before
+        //playerAnimator.SetLayerWeight(2, layerWeight);
+        //playerAnimator.GetCurrentAnimatorStateInfo();
+
         Vector3 movement = transform.right * xAxis + transform.forward * zAxis;
         characterController.Move(movement * currentPlayerSpeed * Time.deltaTime);
 
@@ -149,11 +266,15 @@ public class PlayerController : MonoBehaviour
         {
             if (dashTimer <= 0f)
             {
+                playerAnimator.Play("UI_Main_Dash", 1, 0.3f); 
                 characterController.Move(transform.forward * dashDistance);
                 dashTimer = dashCooldown; // Reset dashTimer when dash is called
             }
         }
-
+        else
+        {
+            
+        }
         // Freefall formula, applies gravity over time
         velocity.y += gravity * Time.deltaTime;
         
@@ -164,17 +285,40 @@ public class PlayerController : MonoBehaviour
     private void SwordControl()
     {
         // Left mouse button
-        if (Input.GetKeyDown(KeyCode.Mouse0) && playerSword != null)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && SwordController.Instance.GetHoldingStatus())
         {
             if (!isSwinging)
             {
                 Debug.Log("Clicked Left!");
                 isSwinging = true;
-                StartCoroutine(SwordAttack());
+                playerAnimator.SetInteger("attackID", 0);
+                StartCoroutine(SwordAttack(firstSlashClip));
+            }
+            /* Old Swing Approach
+                StartCoroutine(SwordAttack(firstSlashClip));
             }
             else
             {
-                Debug.Log("Currently Swinging, please wait!");
+                Debug.Log("Currently first swing, please wait!"); // Animation anim; anim get animation from somewhere isplaying property
+                if (playerAnimator.GetCurrentAnimatorStateInfo(1).length > playerAnimator.GetAnimatorTransitionInfo(1).normalizedTime)
+                {
+                    playerAnimator.SetInteger("attackID", 1);
+                    Debug.Log("Now Second Swing");
+                }
+            }
+            */
+        }
+
+        // Right Mouse Button
+        if (Input.GetKeyDown(KeyCode.Mouse1) && SwordController.Instance.GetHoldingStatus())
+        {
+            if (!isSwinging) 
+            {
+                Debug.Log("Clicked Right!");
+                isSwinging = true;
+                playerAnimator.SetInteger("attackID", 1);
+                StartCoroutine(SwordAttack(secondSlashClip));
+                Time.timeScale = 0.25f;
             }
         }
 
@@ -182,7 +326,7 @@ public class PlayerController : MonoBehaviour
         throwTimer -= Time.deltaTime;
         throwTimer = Mathf.Clamp(throwTimer, 0f, throwCooldown);
         // Right mouse button
-        if (Input.GetKeyDown(KeyCode.Mouse2) && throwTimer <= 0f)
+        if ((Input.GetKeyDown(KeyCode.Mouse2) || Input.GetKeyDown(KeyCode.F)) && throwTimer <= 0f)
         {
             if (playerSword != null)
             {
@@ -191,19 +335,27 @@ public class PlayerController : MonoBehaviour
                 throwTimer = throwCooldown;
             }
         }
+
     }
     
-    private IEnumerator SwordAttack()
+    private IEnumerator SwordAttack(float attackTime)
     {
         // SwordController.Instance.SwingSword();
-        yield return new WaitForSeconds(2f);
+        Debug.Log("Attack - " + attackTime);
+        yield return new WaitForSeconds(attackTime);
         isSwinging = false;
+        playerAnimator.SetInteger("attackID", -1);
         Debug.Log("Swing complete!");
+        Time.timeScale = 1;
     }
 
     public void TakeDamage(float damageAmount)
     {
-        pHealth -= damageAmount;
+        currentPlayerHealth -= damageAmount;
+        if (currentPlayerHealth == 0)
+        {
+            currentPlayerHealth = 0;
+        }
     }
 
     // Returns current player speed
@@ -214,7 +366,7 @@ public class PlayerController : MonoBehaviour
     
     public float GetPlayerHealth()
     {
-        return pHealth;
+        return currentPlayerHealth;
     }
     
 }

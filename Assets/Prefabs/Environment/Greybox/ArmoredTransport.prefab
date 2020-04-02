@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!64 &7549400005757792082
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529420062643912922}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4068373912626513877, guid: 450b1436ce33e4c44a2de9be1f630cfa, type: 3}
 --- !u!1 &2433023697205510255
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,8 +23,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6496350407207508681}
-  - component: {fileID: 9161556781550943605}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ArmoredTransport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,19 +45,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &9161556781550943605
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2433023697205510255}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 150, y: 200, z: 400}
-  m_Center: {x: 0, y: 20, z: 0}
 --- !u!1001 &2005581923272408288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114,6 +114,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2649ff10180aff242a6620fee2c27d7c, type: 3}
+--- !u!1 &1529420062643912922 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1075468965685738554, guid: 2649ff10180aff242a6620fee2c27d7c,
+    type: 3}
+  m_PrefabInstance: {fileID: 2005581923272408288}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2549827566263988937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4086889717322305065, guid: 2649ff10180aff242a6620fee2c27d7c,
