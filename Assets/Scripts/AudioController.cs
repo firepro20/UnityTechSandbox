@@ -148,6 +148,11 @@ public class AudioController : MonoBehaviour
         effectsAudioSource.PlayOneShot(playerHurt);
     }
 
+    public void PlaySoldierAttack()
+    {
+        effectsAudioSource.PlayOneShot(soldierAttackClip);
+    }
+
     // Clear effectsAudioSource
     public void ClearEffectsSource()
     {

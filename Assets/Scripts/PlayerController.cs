@@ -366,7 +366,7 @@ public class PlayerController : MonoBehaviour
                         AudioController.Instance.PlaySecondSwing();
                     }
                 }
-                // prevents attack click spam
+                // prevents attack click spam, comvined with exit time in animator properties
             }
         }
         // Right Mouse Button
