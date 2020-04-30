@@ -9,17 +9,24 @@ public class SwordController : MonoBehaviour
     public static SwordController Instance { get { return instance; } }
 
     // Public Variables
-    public float throwForce = 800f;
     public GameObject sword;
+    public float throwForce = 800f;
+    public int swordDamage = 10;
     public Transform shootPoint;
-    public bool isHolding = true;
+    
 
     // Internal Variables
     private Vector3 originalPosition;
     private Quaternion originalRotation;
     private Vector3 originalScale;
-    private SphereCollider swordCollider;
     private Transform swordParent;
+    private Transform rootParent;
+    private SphereCollider swordCollider;
+    
+    private bool isHolding = true;
+    private bool swordPickupDelay = false;
+    private float pickupDelay = 0.7f;
+
 
     void Awake()
     {
@@ -41,13 +48,13 @@ public class SwordController : MonoBehaviour
         originalPosition = transform.localPosition; 
         originalRotation = transform.localRotation;
         originalScale = transform.localScale;
-        Debug.Log("Information - " + originalPosition + "\t" + originalRotation + "\t" + originalScale);
         swordCollider = GetComponentInChildren<SphereCollider>();
         if (!swordCollider)
         {
             Debug.Log("Sword Collider not retrieved!");
         }
         swordParent = transform.parent;
+        rootParent = transform.root;
     }
 
     // Update is called once per frame
@@ -62,17 +69,19 @@ public class SwordController : MonoBehaviour
             sword.GetComponent<Rigidbody>().velocity = Vector3.zero;
             sword.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             sword.GetComponent<Rigidbody>().useGravity = false;
-            sword.transform.SetParent(swordParent); // player
+            sword.transform.SetParent(swordParent); // right wrist
+            //Time.timeScale = 1f;
         }
         else
         {
             sword.transform.SetParent(null);
-            // apply force
+            //Time.timeScale = 0.4f;
         }
     }
 
     private void LateUpdate()
     {
+        // Sword teleports to 1,1,1
         if (transform.position.y < -20f)
         {
             transform.position = Vector3.one;
@@ -82,6 +91,34 @@ public class SwordController : MonoBehaviour
     // Hits player, set sword to original holding position
     private void OnCollisionEnter(Collision collision)
     {
+        if (!collision.collider.isTrigger)
+        {
+            // when something hit play once, check if not currently playing
+            if (isHolding && PlayerController.Instance.swingState())
+            {
+                // play effect
+                AudioController.Instance.PlaySwordHit();
+                Debug.Log("Sword hit - " + collision.gameObject.name);
+            }
+            else 
+            {
+                // do nothing
+            }
+
+            switch (collision.gameObject.tag)
+            {
+                case "Executioner":
+                    collision.gameObject.GetComponent<BigBoiAI>().TakeDamage(swordDamage);
+                    break;
+                case "Drone":
+                    collision.gameObject.GetComponent<DroneAI>().TakeDamage(swordDamage);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        
         // Damage enemies
 
         /*
@@ -98,45 +135,53 @@ public class SwordController : MonoBehaviour
     // called once when object enters trigger
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player") && !isHolding)
+        if (other.gameObject.CompareTag("Player") && !isHolding && swordPickupDelay)
         {
-            Debug.Log("Sword Picked Up!");
             isHolding = true;
+            swordPickupDelay = false;
+            PlayerController.Instance.playerAnimator.SetInteger("attackID", -1); // change to pickup, change to idle?
         }
     }
 
     public void ThrowSword()
     {
-        if (isHolding) // might cause issues as isHolding rules in update might interfere
+        if (isHolding) 
         {
+            StartCoroutine(SwordPickupDelay(pickupDelay));
             isHolding = false;
+            Transform tempParent = swordParent;
+            swordParent = rootParent; // shoot from Player transform, which is the root parent of this game object
             sword.transform.position = shootPoint.position;
             sword.transform.rotation = new Quaternion(Camera.main.transform.rotation.x, swordParent.transform.rotation.y, swordParent.transform.rotation.z, swordParent.transform.rotation.w);
             //Vector3 localForward = transform.parent.InverseTransformDirection(transform.forward);
             sword.GetComponent<Rigidbody>().useGravity = true;
             sword.GetComponent<Rigidbody>().detectCollisions = true;
             float forceMultiplier = 2f; // 0f
-            /*
-            if (PlayerController.Instance.GetPlayerSpeed() == forceMultiplier)
-            {
-                forceMultiplier = 0f;
-            }
-            else if (PlayerController.Instance.GetPlayerSpeed() > 0f && PlayerController.Instance.GetPlayerSpeed() <= 5f)
-            {
-                forceMultiplier = 1f;
-            }
-            else
-            {
-                forceMultiplier = 2f;
-            }
-            */
+            
             sword.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * throwForce * forceMultiplier); // swordParent.transform.forward // fires from pivot3
-            //Debug.LogError("Launched!");
+                                                                                                                  
+            // Call animator to play sword throw clip
+            PlayerController.Instance.playerAnimator.Play("UI_Main_Sword_Throw", 1, 0.5f);
+
+            // reset parent
+            swordParent = tempParent;
         }
     }
 
-    public void SwingSword()
+    private IEnumerator SwordPickupDelay(float pickupDelay)
     {
+        yield return new WaitForSeconds(pickupDelay);
+        swordPickupDelay = true;
+        StopCoroutine(SwordPickupDelay(pickupDelay));
+    }
 
+    public bool GetHoldingStatus()
+    {
+        return isHolding;
+    }
+
+    public void SetHoldingStatus(bool swordStatus)
+    {
+        isHolding = swordStatus;
     }
 }

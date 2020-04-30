@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Sword
+  - Menu
+  - AudioController
+  - Executioner
+  - Drone
   layers:
   - Default
   - TransparentFX
@@ -16,9 +20,9 @@ TagManager:
   - 
   - PostProcessing
   - Grounded
-  - 
-  - 
-  - 
+  - Player
+  - Interactable
+  - Environment
   - 
   - 
   - 
