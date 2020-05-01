@@ -1609,6 +1609,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 204400407717014506, guid: 2645afd21f92d2449bc47a9da0832d0e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71cb5c6866519f7459e61f913f1e4ca1, type: 2}
+    - target: {fileID: 1030938122328904652, guid: 2645afd21f92d2449bc47a9da0832d0e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71cb5c6866519f7459e61f913f1e4ca1, type: 2}
+    - target: {fileID: 2601713491159252209, guid: 2645afd21f92d2449bc47a9da0832d0e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71cb5c6866519f7459e61f913f1e4ca1, type: 2}
+    - target: {fileID: 3129929458284532469, guid: 2645afd21f92d2449bc47a9da0832d0e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71cb5c6866519f7459e61f913f1e4ca1, type: 2}
+    - target: {fileID: 4232775665612489575, guid: 2645afd21f92d2449bc47a9da0832d0e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71cb5c6866519f7459e61f913f1e4ca1, type: 2}
+    - target: {fileID: 5655039246018656488, guid: 2645afd21f92d2449bc47a9da0832d0e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71cb5c6866519f7459e61f913f1e4ca1, type: 2}
+    - target: {fileID: 5814185405597981956, guid: 2645afd21f92d2449bc47a9da0832d0e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71cb5c6866519f7459e61f913f1e4ca1, type: 2}
     - target: {fileID: 8050952155379557237, guid: 2645afd21f92d2449bc47a9da0832d0e,
         type: 3}
       propertyPath: speedometer
