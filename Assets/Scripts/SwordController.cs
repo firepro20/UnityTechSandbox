@@ -94,11 +94,10 @@ public class SwordController : MonoBehaviour
         if (!collision.collider.isTrigger)
         {
             // when something hit play once, check if not currently playing
-            if (isHolding && PlayerController.Instance.swingState())
+            if (isHolding && PlayerController.Instance.swingState() && (collision.gameObject.GetComponent<BigBoiAI>() || collision.gameObject.GetComponent<DroneAI>()))
             {
                 // play effect
                 AudioController.Instance.PlaySwordHit();
-                Debug.Log("Sword hit - " + collision.gameObject.name);
             }
             else 
             {

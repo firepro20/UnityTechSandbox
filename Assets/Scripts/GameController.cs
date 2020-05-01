@@ -145,19 +145,21 @@ public class GameController : MonoBehaviour
             // show timer when game ends
             timerStatus = true;
             isPlaying = false;
-            gameOver = true;
+            gameOver = true; 
+            hud.gameObject.SetActive(timerStatus);
         }
-
-        
+      
         if (gameOver)
         {
             foreach(RectTransform menuOption in pauseMenu.GetComponentsInChildren<RectTransform>())
             {
                 if (menuOption.name == "Resume")
                 {
-                    menuOption.gameObject.SetActive(true);
+                    menuOption.gameObject.SetActive(false);
                 }
+                //pauseMenu.gameObject.SetActive(!isPlaying);
             }
+            pauseMenu.gameObject.SetActive(!isPlaying);
         }
         else
         {
@@ -231,7 +233,7 @@ public class GameController : MonoBehaviour
 
     private bool NoEnemiesRemaining()
     {
-        return GameObject.FindGameObjectsWithTag("Executioner").Length <= 0 && GameObject.FindGameObjectsWithTag("Drone").Length <= 0;
+        return GameObject.FindObjectsOfType<BigBoiAI>().Length <= 0 && GameObject.FindObjectsOfType<DroneAI>().Length <= 0;
     }
 
     public void Resume()

@@ -11,7 +11,8 @@ public class AudioController : MonoBehaviour
     public AudioClip menuSelect;
     public AudioClip menuPress;
     public AudioClip dashClip;
-    public AudioClip enemyDeath;
+    public AudioClip executionerDeath;
+    public AudioClip droneDeath;
     public AudioClip soldierAttackClip;
     public AudioClip firstSwingClip;
     public AudioClip secondSwingClip;
@@ -137,9 +138,14 @@ public class AudioController : MonoBehaviour
         effectsAudioSource.PlayOneShot(dashClip);
     }
 
-    public void PlayEnemyDeath()
+    public void PlayExecutionerDeath()
     {
-        effectsAudioSource.PlayOneShot(enemyDeath);
+        effectsAudioSource.PlayOneShot(executionerDeath);
+    }
+
+    public void PlayDroneDeath()
+    {
+        effectsAudioSource.PlayOneShot(droneDeath);
     }
 
     public void PlayerDamaged()

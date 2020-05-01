@@ -266,7 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 8050952155379557239}
   playerSpeed: 0
-  playerHealth: 10
+  playerHealth: 50
   acceleration: 5
   maxPlayerSpeed: 15
   gravity: -19.62

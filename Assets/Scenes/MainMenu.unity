@@ -4009,7 +4009,8 @@ MonoBehaviour:
   menuSelect: {fileID: 8300000, guid: 03d4dc4a3b3744849b1fc4dcd5e61662, type: 3}
   menuPress: {fileID: 8300000, guid: 4d8555a655f6297429d20864a8fc70df, type: 3}
   dashClip: {fileID: 8300000, guid: 859b8cb2caca8704c8852a4fddf5f716, type: 3}
-  enemyDeath: {fileID: 8300000, guid: 74de26367977c5a4ba96c11827f7eef1, type: 3}
+  executionerDeath: {fileID: 8300000, guid: 74de26367977c5a4ba96c11827f7eef1, type: 3}
+  droneDeath: {fileID: 8300000, guid: d232eb15a33ea4b489e8430ae431ac6a, type: 3}
   soldierAttackClip: {fileID: 8300000, guid: 07bbd27fb4b8a144a8090015b9da218f, type: 3}
   firstSwingClip: {fileID: 8300000, guid: d0103224d24e58c419d765ee8012af34, type: 3}
   secondSwingClip: {fileID: 8300000, guid: e55cff1e1ec535b4abed7a5c2f3aaf74, type: 3}

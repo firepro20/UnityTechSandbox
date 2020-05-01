@@ -177,43 +177,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Retrieves Animator Weight
-    /*
-    private void UpdateLayerWeight()
-    {
-        layers = playerAnimatorController.layers;
-        // remove first element which represents first layer, 
-        //as default weight does not take into account first layer
-        foreach (AnimatorControllerLayer animatorLayer in layers)
-        {
-            // case hold info on different weights
-            Debug.Log(animatorLayer.name);
-            Debug.Log(animatorLayer.defaultWeight);
-        }
-    }
-    */
-
     // Checks player health
     private void PlayerStatus()
     {
-        if (currentPlayerHealth <= 0 || Input.GetKeyDown(KeyCode.G))
+        if (currentPlayerHealth <= 0)
         {
-            Debug.Log("KeyPressed");
             if (!playerAnimator.GetBool("isDead"))
             {
                 playerAnimator.SetBool("isDead", true);
                 StartCoroutine(ClipDelay(deathClip));
             }
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            playerAnimator.SetBool("isDead", false);
-            SceneManager.LoadScene("MainScene");
-        }
-        if (Input.GetKeyDown(KeyCode.H)) // playerHit
-        {
-            playerAnimator.SetBool("isHit", true);
-            StartCoroutine(ClipDelay(shieldClip, "isHit"));
         }
     }
 
@@ -222,6 +195,11 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(clipDuration);
         StopCoroutine(ClipDelay(clipDuration, animationName));
+        if (clipDuration == deathClip)
+        {
+            SceneManager.LoadScene(1);
+        }
+
         if (animationName != null)
         {
             playerAnimator.SetBool(animationName, animState);
@@ -433,9 +411,15 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damageAmount)
     {
         currentPlayerHealth -= damageAmount;
-        if (currentPlayerHealth == 0)
+        if (currentPlayerHealth <= 0)
         {
             currentPlayerHealth = 0;
+        }
+        else
+        {
+            playerAnimator.SetBool("isHit", true);
+            AudioController.Instance.PlayerDamaged();
+            StartCoroutine(ClipDelay(shieldClip, "isHit"));
         }
     }
 

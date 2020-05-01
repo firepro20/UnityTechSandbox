@@ -12,7 +12,6 @@ public class BigBoiAI : MonoBehaviour
     // Damage
     public float attackDamage = 10f;
     // Pathfinding //
-    public GameObject theDestination; //The player, or waypoints in our case
     NavMeshAgent theAgent;
     // Patrolling //
     public Transform pathHolder; // Holds the path in which the enemy follows
@@ -24,8 +23,6 @@ public class BigBoiAI : MonoBehaviour
     public Light spotlight;
     public float viewDistance;
     public float attackDistance;
-    public float attackDelay = 2f;
-    private bool canAttack;
     public LayerMask viewMask;
     private float viewAngle;
     //Enemy Field of View for player //
@@ -38,12 +35,15 @@ public class BigBoiAI : MonoBehaviour
     private Vector3 currentPosition;
     private Vector3 currentAngle;
     private bool CoroutineHasStarted = false;
+    private bool PlaceWaypointsOnce = false;
     private bool onlyCheckUnseenOnce = true;
     //Timer Code //
     public float idleTime = 30f; //Idle timer//
     private float idleDelay; //Idle timer//
     public float wanderTime = 3f; //Alert timer//
     private float wanderDelay; //Alert timer//
+    private float attackDelay = 2f;
+    private bool canDamage = true;
     //Animations//
     public Animator bigBoiAnimator;
 
@@ -79,8 +79,6 @@ public class BigBoiAI : MonoBehaviour
         bigBoiAnimator = GetComponentInChildren<Animator>();
 
         currentEnemyHealth = health;
-
-        canAttack = true;
     }
 
     // Called at set interval each time. Good for physics
@@ -167,7 +165,7 @@ public class BigBoiAI : MonoBehaviour
             theAgent.speed = originalSpeed;
         }
     }
-    // This is out of place
+
     bool droneInRange()
     {
         // If the enemy is dead, we don't want him to be able to see the player anymore (protection from zombie bugs)
@@ -258,21 +256,17 @@ public class BigBoiAI : MonoBehaviour
                 // if the enemy has reached the current target waypoint then...
                 float distanceCheck = Vector3.Distance(transform.position, targetWaypoint);
 
-                if (distanceCheck <= 0.8f)
+                if (distanceCheck <= 0.5f)
                 {
                     //...we want to move onto the next waypoint
                     // When the waypoint array has reached its limit, we should return it to zero.
                     targetWaypointIndex = (targetWaypointIndex + 1) % waypoints.Length;
                     targetWaypoint = waypoints[targetWaypointIndex];
-                    // When we reach the way point we want to pause for the wait time//
+                // When we reach the way point we want to pause for the wait time//
 
                     // The enemy is now idle, we want them to wait and then move
-
-                    //aiState = State.Idle;
-                    //bigBoiAnimator.SetBool("isIdle", true);
                     yield return new WaitForSeconds(waypointWaitTime);
-                    //bigBoiAnimator.SetBool("isIdle", false);
-                    
+                    //aiState = State.Idle;
 
                     // Using pythragoras, we want to calculate how much the enemy has to turn to look towards a new objective
                     Vector3 dirToLookTarget = (targetWaypoint - transform.position).normalized;
@@ -374,18 +368,17 @@ public class BigBoiAI : MonoBehaviour
         // We don't want this to run infinitely, bool "switch gate" to turn it off.
         if (CoroutineHasStarted == false)
         {
-            // We want to get the enemy to understand what these way point mean, use for loop to collect them all
-            // and put them into an array
-            Vector3[] waypoints = new Vector3[pathHolder.childCount];
-            for (int i = 0; i < waypoints.Length; i++)
-            {
-                waypoints[i] = pathHolder.GetChild(i).position;
+                // We want to get the enemy to understand what these way point mean, use for loop to collect them all
+                // and put them into an array
+                Vector3[] waypoints = new Vector3[pathHolder.childCount];
+                for (int i = 0; i < waypoints.Length; i++)
+                {
+                    waypoints[i] = pathHolder.GetChild(i).position;
 
-                // So that the enemy doesn't clip through the floor, change the waypoints y axis
-                waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
-            }
-
-            //bigBoiAnimator.SetBool("isPatrolling", true);
+                    // So that the enemy doesn't clip through the floor, change the waypoints y axis
+                    waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
+                }
+            
             StartCoroutine(FollowPath(waypoints));
             // Close the bool "gate"
             CoroutineHasStarted = true;
@@ -403,11 +396,8 @@ public class BigBoiAI : MonoBehaviour
         bigBoiAnimator.SetBool("isLookingAround", false);
         bigBoiAnimator.SetBool("isDead", false);
 
-        // the enemies will go toward whatever we set as theDestination (player)
-        if (Vector3.Distance(transform.position, theDestination.transform.position) > 0.5f) 
-        {
-            theAgent.SetDestination(theDestination.transform.position);
-        }
+        // the enemies will go toward the player
+        theAgent.SetDestination(player.transform.position);
         spotlight.color = Color.red;
         // We will never be fully idle again, we can only ever be alert now.
         HasSeenPlayer = true;
@@ -454,16 +444,7 @@ public class BigBoiAI : MonoBehaviour
         bigBoiAnimator.SetBool("isAttacking", true);
 
         //Debug.Log("We are now attacking");
-
-        // coroutine with attackclip time and flag
-        if (Vector3.Distance(transform.position, theDestination.transform.position) < 0.5f && canAttack)
-        {
-            InflictDamage(attackDelay);
-        }
-        
-
-        // After the player takes damage, we want to move from this state
-        aiState = State.Idle;
+        //aiState = State.Idle;
     }
 
     private void Dead()
@@ -477,16 +458,15 @@ public class BigBoiAI : MonoBehaviour
         bigBoiAnimator.SetBool("isLookingAround", false);
         bigBoiAnimator.SetBool("isDead", true);
 
-        //Update the drone list to make sure it knows he is dead // This needs to change
-        foreach (DroneAI drone in drones)
-        {
-            if (drone.nearestAlly = this.gameObject)
+        //Update the drone list to make sure it knows he is dead
+            foreach (DroneAI drone in drones)
             {
-                drone.RefreshAllyList();
+                if (drone.nearestAlly = this.gameObject)
+                {
+                   drone.RefreshAllyList();
+                }
             }
-        }
-
-        // We want to make sure that the big boy is dead, remove him from scene temporatily         
+        
     }
 
     public void TakeDamage(float damageAmount)
@@ -501,30 +481,62 @@ public class BigBoiAI : MonoBehaviour
         bigBoiAnimator.SetBool("isDead", false);
 
         currentEnemyHealth -= damageAmount;
-       
-        if (currentEnemyHealth <= 0 && aiState != State.Dead)
+        if (currentEnemyHealth == 0)
+        {
+            currentEnemyHealth = 0;
+        }
+
+        if (currentEnemyHealth == 0)
         {
             aiState = State.Dead;
-            DeathDelay(3f);
-            
-            /*
-            this.enabled = false;
-            gameObject.SetActive(false);
-            */
         }
     }
 
-    IEnumerator InflictDamage(float attackCooldown)
+    //////////////////////////
+    /// ANIMATOR FUNCTIONS ///
+    //////////////////////////
+
+        // ATTACK
+    public void attackAnimationBegin()
     {
-        PlayerController.Instance.TakeDamage(attackDamage);
-        Debug.Log("Called Attack on Player");
-        yield return new WaitForSeconds(attackCooldown);
-        canAttack = true;
+        theAgent.speed = 0;
+        AudioController.Instance.PlaySoldierAttack();
     }
 
-    IEnumerator DeathDelay(float deathDelay)
+    public void checkToDamage()
     {
-        yield return new WaitForSeconds(deathDelay);
+        if (aiState == State.Attack && canDamage)
+        {
+            PlayerController.Instance.TakeDamage(attackDamage);
+            canDamage = false;
+        }
+    }
+
+    public void attackAnimationEnd()
+    {
+        theAgent.speed = originalSpeed;
+        canDamage = true;
+    }
+
+    // HIT
+    public void hitOver()
+    {
+        aiState = State.Alert;
+    }
+
+    // DEATH
+    public void deathAnimationBegin()
+    {
+        // We don't want him moving as he dies, the animator will handle that.
+        theAgent.speed = 0;
+        patrolSpeed = 0;
+        AudioController.Instance.PlayExecutionerDeath();
+        spotlight.color = Color.clear;
+    }
+
+    public void deathAnimationEnd()
+    {
+        //When he is finished dying, delete him from the current run
         this.enabled = false;
         gameObject.SetActive(false);
     }

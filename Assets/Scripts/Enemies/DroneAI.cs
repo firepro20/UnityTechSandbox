@@ -19,6 +19,7 @@ public class DroneAI : MonoBehaviour
     public float patrolSpeed = 5; // The enemy's base patrolSpeed
     public float waypointWaitTime = .3f;
     public float turnpatrolSpeed = 90;
+    private float originalSpeed = 0;
     //Enemy Field of View //
     public Light spotlight;
     public float viewDistance;
@@ -50,6 +51,8 @@ public class DroneAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Remember what speed we had origionally
+        originalSpeed = patrolSpeed;
 
         // Call the Player tag into this code
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -364,8 +367,8 @@ public class DroneAI : MonoBehaviour
         droneAnimator.SetBool("isHit", false);
         droneAnimator.SetBool("isShooting", false);
 
-        // the enemies will go toward whatever we set as theDestination (player)
-        theAgent.SetDestination(theDestination.transform.position);
+        // the enemies will go toward the player
+        theAgent.SetDestination(player.transform.position);
         spotlight.color = Color.red;
         // We will never be fully idle again, we can only ever be alert now.
         HasSeenPlayer = true;
@@ -406,11 +409,6 @@ public class DroneAI : MonoBehaviour
         droneAnimator.SetBool("seesPlayer", false);
         droneAnimator.SetBool("isHit", false);
         droneAnimator.SetBool("isShooting", true);
-
-        PlayerController.Instance.TakeDamage(attackDamage);
-
-        // After the player takes damage, we want to move from this state
-        aiState = State.Idle;
     }
 
     private void Dead()
@@ -423,8 +421,6 @@ public class DroneAI : MonoBehaviour
         droneAnimator.SetBool("seesPlayer", false);
         droneAnimator.SetBool("isHit", false);
         droneAnimator.SetBool("isShooting", false);
-
-        DeathDelay(2f);
     }
 
     public void TakeDamage(float damageAmount)
@@ -465,10 +461,39 @@ public class DroneAI : MonoBehaviour
         }
     }
 
-    IEnumerator DeathDelay(float deathDelay)
+    //////////////////////////
+    /// ANIMATOR FUNCTIONS ///
+    //////////////////////////
+
+    // ATTACK
+    public void checkToDamage()
     {
-        yield return new WaitForSeconds(deathDelay);
-        gameObject.GetComponent<DroneAI>().enabled = false;
+        if (aiState == State.Attack)
+        {
+            PlayerController.Instance.TakeDamage(attackDamage);
+        }
+    }
+
+    // HIT
+    public void hitOver()
+    {
+        aiState = State.Alert;
+    }
+
+    // DEATH
+    public void deathAnimationBegin()
+    {
+        // We don't want him moving as he dies, the animator will handle that.
+        theAgent.speed = 0;
+        patrolSpeed = 0;
+        AudioController.Instance.PlayDroneDeath();
+        spotlight.color = Color.clear;
+    }
+
+    public void deathAnimationEnd()
+    {
+        //When he is finished dying, delete him from the current run
+        this.enabled = false;
         gameObject.SetActive(false);
     }
 }
