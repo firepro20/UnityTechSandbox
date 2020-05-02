@@ -268,7 +268,7 @@ MonoBehaviour:
   playerSpeed: 0
   playerHealth: 50
   acceleration: 5
-  maxPlayerSpeed: 15
+  maxPlayerSpeed: 10
   gravity: -19.62
   jumpHeight: 2
   dashDistance: 15

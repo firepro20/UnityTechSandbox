@@ -156,6 +156,7 @@ public class GameController : MonoBehaviour
                 if (menuOption.name == "Resume")
                 {
                     menuOption.gameObject.SetActive(false);
+                    menuOption.gameObject.GetComponent<TextMeshProUGUI>().text = "Complete!";
                 }
                 //pauseMenu.gameObject.SetActive(!isPlaying);
             }
