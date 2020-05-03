@@ -158,7 +158,6 @@ public class GameController : MonoBehaviour
                     menuOption.gameObject.transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "Complete!";
                     menuOption.gameObject.SetActive(false);
                 }
-                //pauseMenu.gameObject.SetActive(!isPlaying);
             }
             pauseMenu.gameObject.SetActive(!isPlaying);
         }
