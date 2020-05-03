@@ -145,6 +145,7 @@ public class AudioController : MonoBehaviour
 
     public void PlayDroneDeath()
     {
+        effectsAudioSource.volume = effectsAudioSource.volume * 0.60f;
         effectsAudioSource.PlayOneShot(droneDeath);
     }
 
